@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     InputSystem_Actions inputHandler;
 
     //Clamp Values
-    float xLook,yGain;
+    float xLook,yLook;
     [SerializeField] float yLookLimit = 60,xLookLimit=60;
 
     //Camera Control
@@ -26,13 +26,13 @@ public class Player : MonoBehaviour
     {
         Vector2 LookInput=inputHandler.Player.Look.ReadValue<Vector2>();
 
-        float yLook=LookInput.y*camSensitivity*Time.deltaTime;  // Left To Right Rotation
-        yGain += yLook;
-        yGain = Mathf.Clamp(yGain, -yLookLimit, yLookLimit);
-        xLook-=LookInput.x*camSensitivity*Time.deltaTime;  //Up down Rotation
+        yLook+=LookInput.x*camSensitivity*Time.deltaTime;  // Left To Right Rotation
+        yLook = Mathf.Clamp(yLook, -yLookLimit, yLookLimit);
+
+        xLook-=LookInput.y*camSensitivity*Time.deltaTime;  //Up down Rotation
         xLook=Mathf.Clamp(xLook, -xLookLimit, xLookLimit);
 
-        transform.localRotation = Quaternion.Euler(xLook, yGain, 0);
+        transform.localRotation = Quaternion.Euler(xLook, yLook, 0);
 
     }
 }
