@@ -30,7 +30,6 @@ public class Sniper : MonoBehaviour
     [Header("Gun Parameters")]
     float currentBullet=5;
     [SerializeField] int maxBullet=7;
-    [SerializeField] float reloadTime=3;
     [SerializeField] int damage = 150;
     [SerializeField] float _gunImpact=3;
     [SerializeField] float _gunImpulse=1;
@@ -109,6 +108,7 @@ public class Sniper : MonoBehaviour
     {
         currentBullet = maxBullet;
         canShoot = true;
+        animator.ResetTrigger("isReload");
     }
     void StopBreathing()
     {
