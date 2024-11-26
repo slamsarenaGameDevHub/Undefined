@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(CinemachineImpulseSource))]
 public class Sniper : MonoBehaviour
 {
     //Player Input
@@ -14,22 +15,26 @@ public class Sniper : MonoBehaviour
 
     //Components
     Animator animator;
-    RecoilSystem1 _recoil;
     CinemachineVirtualCamera _cam;
     CinemachineVirtualCamera shakeCam;
     Scope gunScope;
     GameObject weaponCam;
     Volume gunVolume;
-
+    CinemachineImpulseSource impulseCam;
     //Gun Checks
-    bool isReload =false;
+    bool isReload =false,canShoot=true;
+    [SerializeField] Image dCrossHair;
+    AudioSource gunSource;
 
 
     [Header("Gun Parameters")]
     float currentBullet=5;
     [SerializeField] int maxBullet=7;
-    [SerializeField] float gunDamage;
-
+    [SerializeField] float reloadTime=3;
+    [SerializeField] int damage = 150;
+    [SerializeField] float _gunImpact=3;
+    [SerializeField] float _gunImpulse=1;
+    [SerializeField] float _maxRange=1000;
     private void Start()
     {
         GetCom();
@@ -39,16 +44,27 @@ public class Sniper : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         inputHandler=new InputSystem_Actions();
         inputHandler.Player.Enable();
+        Cursor.lockState = CursorLockMode.Locked;
 
         animator=GetComponentInParent<Animator>();
-        _recoil=GetComponentInParent<RecoilSystem1>();
+        gunSource = GetComponent<AudioSource>();
         _cam=GameObject.FindGameObjectWithTag("Scope Cam").GetComponent<CinemachineVirtualCamera>();
         shakeCam=GameObject.FindGameObjectWithTag("Shake Cam").GetComponent<CinemachineVirtualCamera>();
         gunScope=GetComponent<Scope>();
         gunVolume = GameObject.Find("Gun Volume").GetComponent<Volume>();
+        impulseCam=GetComponent<CinemachineImpulseSource>();
+        inputHandler.Player.Attack.performed += ctx => Fire();
     }
     private void Update()
     {
+        if(currentBullet<=0)
+        {
+            isReload=true;
+        }
+        else
+        {
+            isReload = false;
+        }
         if (weaponCam == null)
         {
             weaponCam = GameObject.FindGameObjectWithTag("Weapon Camera");
@@ -56,6 +72,43 @@ public class Sniper : MonoBehaviour
         Scope();
         PlayAnimation();
         StopBreathing();
+    }
+    void Fire()
+    {
+        if (currentBullet <= 0 || !canShoot) return;
+        gunSource.Play();
+        currentBullet--;
+        animator.SetTrigger("shoot");
+        impulseCam.GenerateImpulse(_gunImpulse);
+        RaycastHit hit;
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, _maxRange))
+        {
+            //Get Collider Info
+            TargetHealth target = hit.transform.GetComponent<TargetHealth>();
+            Rigidbody rb = hit.transform.GetComponent<Rigidbody>();
+
+            if (target != null)
+            {
+                target.TakeDamage(damage);
+            }
+            if (rb != null)
+            {
+                rb.AddForce(hit.normal * _gunImpact * Time.deltaTime);
+            }
+         
+        }
+        canShoot = false;
+    }
+    
+    public void CanShoot()
+    {
+        if (currentBullet <= 0) return;
+        canShoot=true;
+    }
+    public void Reload()
+    {
+        currentBullet = maxBullet;
+        canShoot = true;
     }
     void StopBreathing()
     {
@@ -70,6 +123,7 @@ public class Sniper : MonoBehaviour
     }
     void Scope()
     {
+        if (isReload) return;
         if(isScoped())
         {
             StartCoroutine(ScopeDelay());
@@ -79,6 +133,8 @@ public class Sniper : MonoBehaviour
             weaponCam.SetActive(true);
             GameObject.FindGameObjectWithTag("Scope Image").GetComponent<Image>().enabled=false;
             gunVolume.weight = 0;
+            dCrossHair.enabled = true;
+
         }
 
     }
@@ -89,6 +145,7 @@ public class Sniper : MonoBehaviour
         weaponCam.SetActive(false);
         shakeCam.m_Lens.FieldOfView = gunScope.scopeZoom;
         gunVolume.weight = 1;
+        dCrossHair.enabled = false;
 
     }
     bool isScoped()
@@ -119,7 +176,7 @@ public class Sniper : MonoBehaviour
     {
         if(isReload)
         {
-            animator.SetFloat("Motion", 2);
+            animator.SetTrigger("isReload");
             return;
         }
         else if(isScoped())

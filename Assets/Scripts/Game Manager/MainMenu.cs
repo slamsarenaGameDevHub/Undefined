@@ -14,6 +14,11 @@ public class MainMenu : MonoBehaviour
     void Update()
     {
         RotateGun();
+        ChooseSpawnPos();
+    }
+    void ChooseSpawnPos()
+    {
+        PlayerPrefs.SetInt("Spawn Position", Random.Range(0, 11)); 
     }
     void RotateGun()
     {
