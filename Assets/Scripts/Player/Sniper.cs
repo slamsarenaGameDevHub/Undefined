@@ -192,3 +192,8 @@ public class Sniper : MonoBehaviour
     }
 
 }
+public interface ITakeDamage 
+{
+    public void DealDamage();
+}
+
