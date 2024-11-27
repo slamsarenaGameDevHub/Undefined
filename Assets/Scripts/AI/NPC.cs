@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(NavMeshAgent),(typeof(DestroyGameObject)))]
 public class NPC : MonoBehaviour, ITakeDamage,IScare
 {
     internal enum DirectionOfMovement

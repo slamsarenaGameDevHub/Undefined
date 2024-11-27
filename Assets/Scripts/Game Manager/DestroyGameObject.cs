@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(BoxCollider))]
 public class DestroyGameObject : MonoBehaviour
 {
     internal enum DestroyType
@@ -11,6 +12,16 @@ public class DestroyGameObject : MonoBehaviour
 
     float countDown;
     [SerializeField] float _Delay=2;
+
+    [SerializeField] Vector3 boxSize=new Vector3(3,3,3);
+
+    BoxCollider _collider;
+    private void Start()
+    {
+        _collider=GetComponent<BoxCollider>();
+        _collider.isTrigger = true;
+        _collider.size = boxSize;
+    }
     private void Update()
     {
         switch (_destroyType)

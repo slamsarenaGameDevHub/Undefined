@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(NavMeshAgent),typeof(DestroyGameObject))]
 public class Terrorist : MonoBehaviour, ITakeDamage,IScare
 {
     internal enum DirectionOfMovement

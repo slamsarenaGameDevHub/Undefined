@@ -13,6 +13,7 @@ TagManager:
   - Scope Cam
   - Weapon Camera
   - Shake Cam
+  - Destroyer
   layers:
   - Default
   - TransparentFX
