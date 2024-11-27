@@ -34,6 +34,7 @@ public class Sniper : MonoBehaviour
     [SerializeField] float _gunImpact=3;
     [SerializeField] float _gunImpulse=1;
     [SerializeField] float _maxRange=1000;
+    [SerializeField] float scareRange=30;
     private void Start()
     {
         GetCom();
@@ -83,12 +84,24 @@ public class Sniper : MonoBehaviour
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, _maxRange))
         {
             //Get Collider Info
-            TargetHealth target = hit.transform.GetComponent<TargetHealth>();
+            ITakeDamage target=hit.transform.GetComponent<ITakeDamage>();
             Rigidbody rb = hit.transform.GetComponent<Rigidbody>();
-
+            
             if (target != null)
             {
-                target.TakeDamage(damage);
+                target.DealDamage(damage);
+            }
+            else
+            {
+                Collider[] col = Physics.OverlapSphere(hit.point, scareRange);
+                foreach (Collider carrier in col)
+                {
+                    IScare scaredPerson = carrier.GetComponent<IScare>();
+                    if(scaredPerson!= null)
+                    {
+                        scaredPerson.Scare();
+                    }
+                }
             }
             if (rb != null)
             {
@@ -194,6 +207,11 @@ public class Sniper : MonoBehaviour
 }
 public interface ITakeDamage 
 {
-    public void DealDamage();
+    public void DealDamage(int damage);
 }
+public interface IScare
+{
+    public void Scare();
+}
+
 
