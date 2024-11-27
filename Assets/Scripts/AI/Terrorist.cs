@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent),typeof(DestroyGameObject))]
+[RequireComponent(typeof(NavMeshAgent))]
 public class Terrorist : MonoBehaviour, ITakeDamage,IScare
 {
     internal enum DirectionOfMovement
@@ -12,6 +12,7 @@ public class Terrorist : MonoBehaviour, ITakeDamage,IScare
         Backward
     }
     [SerializeField] DirectionOfMovement _directionOfMovement;
+    [SerializeField] int directionDeterminer;
 
     [Header("Components")]
     NavMeshAgent Agent;
@@ -33,18 +34,19 @@ public class Terrorist : MonoBehaviour, ITakeDamage,IScare
     Vector3 lastPos;
 
     [Header("Bomb Parameters")]
-    float countDown;
+    [SerializeField] float stopCountDown = 10;
+    [SerializeField] float stopDelay = 10;
+    [SerializeField]float countDown=50;
     [SerializeField] float blastRadius = 20;
-    [SerializeField] 
     void OnEnable()
     {
         GetCom();
         GetWaypoint();
-
     }
+
+
     private void OnDisable()
     {
-
     }
     void GetCom()
     {
@@ -72,6 +74,7 @@ public class Terrorist : MonoBehaviour, ITakeDamage,IScare
         UpdateNode();
         Move();
         GetSpeed();
+        Lurk();
     }
     void UpdateNode()
     {
@@ -113,11 +116,48 @@ public class Terrorist : MonoBehaviour, ITakeDamage,IScare
         Agent.SetDestination(nodes[currentWaypoint].position);
         PlayAnimation();
     }
+    void Lurk()
+    {
+        directionDeterminer = Random.Range(0, 2);
+        stopCountDown-=Time.deltaTime;
+        if (stopCountDown <= 0)
+        {
+            switch (directionDeterminer)
+            {
+                case 0:
+                    _directionOfMovement = DirectionOfMovement.Forward;
+                    break;
+                case 1:
+                    _directionOfMovement = DirectionOfMovement.Backward;
+                    break;
+                    
+            }
+            Agent.isStopped = true;
+            Invoke("StartMoving",stopDelay);
+        }
+        
+
+        #region Bomb Count down
+        if (speed<0.1f)
+        {
+            countDown-=Time.deltaTime;
+            if(countDown<=0)
+            {
+               StartCoroutine(DetonateBomb());
+            }
+        }
+        #endregion
+    }
+    void StartMoving()
+    {
+        Agent.isStopped=false;
+        stopCountDown = stopDelay;
+    }
     public void DealDamage(int damage)
     {
         print(damage);
         Instantiate(ragdoll, transform.position, transform.rotation);
-        GameManager.OnCollect();
+        GameManager.OnCorrectKill();
         Destroy(gameObject);
     }
     void PlayAnimation()

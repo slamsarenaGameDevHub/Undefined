@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent),(typeof(DestroyGameObject)))]
+[RequireComponent(typeof(NavMeshAgent))]
 public class NPC : MonoBehaviour, ITakeDamage,IScare
 {
     internal enum DirectionOfMovement
@@ -15,7 +15,7 @@ public class NPC : MonoBehaviour, ITakeDamage,IScare
     [Header("Components")]
     NavMeshAgent Agent;
     Animator animator;
-    AnimatorOverrideController npcController;
+    [SerializeField]AnimatorOverrideController npcController;
 
     [Header("Waypoint Tracker")]
     int currentWaypoint = 0;
@@ -25,10 +25,9 @@ public class NPC : MonoBehaviour, ITakeDamage,IScare
     public Transform Path;
     List<Transform> nodes;
 
-    [SerializeField] float changeDistance = 8f;
+    [SerializeField] float changeDistance = 8f,stopDuration=37,stoppedDelay=7;
     [SerializeField] float minSpeed = 1, maxSpeed = 2.5f, walkThreshold = 2.4f;
-    float agentSpeed;
-    float speed;
+    float agentSpeed, stopCountDown,speed;
 
     Vector3 lastPos;
 
@@ -49,6 +48,7 @@ public class NPC : MonoBehaviour, ITakeDamage,IScare
         animator.runtimeAnimatorController = npcController;
         Agent.speed = 1;
         lastPos = transform.position;
+        stopCountDown = stopDuration;
     }
 
     void GetWaypoint()
@@ -69,6 +69,7 @@ public class NPC : MonoBehaviour, ITakeDamage,IScare
         UpdateNode();
         Move();
         GetSpeed();
+        Action();
     }
     void UpdateNode()
     {
@@ -110,10 +111,25 @@ public class NPC : MonoBehaviour, ITakeDamage,IScare
         Agent.SetDestination(nodes[currentWaypoint].position);
         PlayAnimation();
     }
+    void Action()
+    {
+        stopCountDown -= Time.deltaTime;
+        if(stopCountDown<=0)
+        {
+            Agent.isStopped= true;
+            Invoke("ResetState", stoppedDelay);
+        }
+
+    }
+    void ResetState()
+    {
+        Agent.isStopped = false;
+    }
     public void DealDamage(int damage)
     {
         if (hasDied) return;
         Instantiate(ragdoll, transform.position, transform.rotation);
+        GameManager.OnWrongKill();
         Destroy(gameObject);
         hasDied = true;
     }

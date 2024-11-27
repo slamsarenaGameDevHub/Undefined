@@ -15,12 +15,14 @@ public class Sniper : MonoBehaviour
 
     //Components
     Animator animator;
+    Volume gunVolume;
     CinemachineVirtualCamera _cam;
     CinemachineVirtualCamera shakeCam;
-    Scope gunScope;
-    GameObject weaponCam;
-    Volume gunVolume;
     CinemachineImpulseSource impulseCam;
+
+    Scope gunScope;
+    ScoreDisplay scoreDisplay;
+    GameObject weaponCam;
     //Gun Checks
     bool isReload =false,canShoot=true;
     [SerializeField] Image dCrossHair;
@@ -54,6 +56,7 @@ public class Sniper : MonoBehaviour
         gunVolume = GameObject.Find("Gun Volume").GetComponent<Volume>();
         impulseCam=GetComponent<CinemachineImpulseSource>();
         inputHandler.Player.Attack.performed += ctx => Fire();
+        scoreDisplay = FindFirstObjectByType<ScoreManager>().scoreHolder;
     }
     private void Update()
     {
@@ -96,6 +99,8 @@ public class Sniper : MonoBehaviour
             if (target != null)
             {
                 target.DealDamage(damage);
+                ScoreDisplay score=Instantiate(scoreDisplay,transform.position,transform.rotation);
+                score.SetScore(damage);
             }
             else
             {
