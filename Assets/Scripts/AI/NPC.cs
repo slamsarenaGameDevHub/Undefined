@@ -15,6 +15,7 @@ public class NPC : MonoBehaviour, ITakeDamage,IScare
     [Header("Components")]
     NavMeshAgent Agent;
     Animator animator;
+    AnimatorOverrideController npcController;
 
     [Header("Waypoint Tracker")]
     int currentWaypoint = 0;
@@ -30,20 +31,22 @@ public class NPC : MonoBehaviour, ITakeDamage,IScare
     float speed;
 
     Vector3 lastPos;
+
+
+    bool hasDied=false;
     void OnEnable()
     {
         GetCom();
         GetWaypoint();
-        GameManager.DamageChanged += Affected;
     }
     private void OnDisable()
     {
-        GameManager.DamageChanged -= Affected;
     }
     void GetCom()
     {
         Agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        animator.runtimeAnimatorController = npcController;
         Agent.speed = 1;
         lastPos = transform.position;
     }
@@ -109,10 +112,10 @@ public class NPC : MonoBehaviour, ITakeDamage,IScare
     }
     public void DealDamage(int damage)
     {
-        print(damage);
+        if (hasDied) return;
         Instantiate(ragdoll, transform.position, transform.rotation);
-        GameManager.OnCollect();
         Destroy(gameObject);
+        hasDied = true;
     }
     void PlayAnimation()
     {
@@ -128,10 +131,6 @@ public class NPC : MonoBehaviour, ITakeDamage,IScare
         {
             animator.SetFloat("Motion", 0);
         }
-    }
-    void Affected()
-    {
-        print("Npc Shot");
     }
     void GetSpeed()
     {

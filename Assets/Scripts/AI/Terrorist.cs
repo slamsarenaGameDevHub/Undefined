@@ -16,6 +16,7 @@ public class Terrorist : MonoBehaviour, ITakeDamage, IScare
     [Header("Components")]
     NavMeshAgent Agent;
     Animator animator;
+    [SerializeField] AnimatorOverrideController npcController;
 
     [Header("Waypoint Tracker")]
     int currentWaypoint = 0;
@@ -33,23 +34,20 @@ public class Terrorist : MonoBehaviour, ITakeDamage, IScare
     Vector3 lastPos;
 
     [Header("Bomb Parameters")]
-    float countDown;
+    [SerializeField]float countDown=60;
     [SerializeField] float blastRadius = 20;
-    [SerializeField]
+    bool hasDied=false;
     void OnEnable()
     {
         GetCom();
         GetWaypoint();
-        GameManager.DamageChanged += Affected;
     }
-    private void OnDisable()
-    {
-        GameManager.DamageChanged -= Affected;
-    }
+ 
     void GetCom()
     {
         Agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        animator.runtimeAnimatorController = npcController;
         Agent.speed = 1;
         lastPos = transform.position;
     }
@@ -72,6 +70,17 @@ public class Terrorist : MonoBehaviour, ITakeDamage, IScare
         UpdateNode();
         Move();
         GetSpeed();
+    }
+    void BombBehaviour()
+    {
+        if(speed<0.1f)
+        {
+            countDown -= Time.deltaTime;
+            if(countDown<=0)
+            {
+                DetonateBomb();
+            }
+        }
     }
     void UpdateNode()
     {
@@ -115,9 +124,10 @@ public class Terrorist : MonoBehaviour, ITakeDamage, IScare
     }
     public void DealDamage(int damage)
     {
+        if (hasDied) return;
         Instantiate(ragdoll, transform.position, transform.rotation);
-        GameManager.OnCollect();
         Destroy(gameObject);
+        hasDied = true;
     }
     void PlayAnimation()
     {
@@ -153,12 +163,14 @@ public class Terrorist : MonoBehaviour, ITakeDamage, IScare
             if (nearbyNpc != null)
             {
                 Instantiate(FindFirstObjectByType<GameManager>().BombPrefab, transform.position, transform.rotation);
+                DealDamage(200);
                 nearbyNpc.DealDamage(200);
             }
         }
     }
     public void Scare()
     {
+        Agent.isStopped = true;
         StartCoroutine(DetonateBomb());
     }
 }
