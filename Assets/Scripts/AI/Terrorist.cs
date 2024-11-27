@@ -40,11 +40,11 @@ public class Terrorist : MonoBehaviour, ITakeDamage,IScare
     {
         GetCom();
         GetWaypoint();
-        GameManager.DamageChanged += Affected;
+
     }
     private void OnDisable()
     {
-        GameManager.DamageChanged -= Affected;
+
     }
     void GetCom()
     {
