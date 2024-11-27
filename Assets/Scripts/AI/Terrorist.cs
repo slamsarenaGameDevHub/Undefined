@@ -1,10 +1,10 @@
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent),typeof(DestroyGameObject))]
-public class Terrorist : MonoBehaviour, ITakeDamage,IScare
+[RequireComponent(typeof(NavMeshAgent), typeof(DestroyGameObject))]
+public class Terrorist : MonoBehaviour, ITakeDamage, IScare
 {
     internal enum DirectionOfMovement
     {
@@ -26,7 +26,7 @@ public class Terrorist : MonoBehaviour, ITakeDamage,IScare
     List<Transform> nodes;
 
     [SerializeField] float changeDistance = 8f;
-    [SerializeField] float minSpeed = 1, maxSpeed = 2.5f,walkThreshold=2.4f;
+    [SerializeField] float minSpeed = 1, maxSpeed = 2.5f, walkThreshold = 2.4f;
     float agentSpeed;
     float speed;
 
@@ -35,7 +35,7 @@ public class Terrorist : MonoBehaviour, ITakeDamage,IScare
     [Header("Bomb Parameters")]
     float countDown;
     [SerializeField] float blastRadius = 20;
-    [SerializeField] 
+    [SerializeField]
     void OnEnable()
     {
         GetCom();
@@ -48,10 +48,10 @@ public class Terrorist : MonoBehaviour, ITakeDamage,IScare
     }
     void GetCom()
     {
-        Agent=GetComponent<NavMeshAgent>();
-        animator=GetComponent<Animator>();
+        Agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
         Agent.speed = 1;
-        lastPos=transform.position;
+        lastPos = transform.position;
     }
 
     void GetWaypoint()
@@ -115,18 +115,17 @@ public class Terrorist : MonoBehaviour, ITakeDamage,IScare
     }
     public void DealDamage(int damage)
     {
-        print(damage);
         Instantiate(ragdoll, transform.position, transform.rotation);
         GameManager.OnCollect();
         Destroy(gameObject);
     }
     void PlayAnimation()
     {
-        if(speed >= walkThreshold)
+        if (speed >= walkThreshold)
         {
             animator.SetFloat("Motion", 2);
         }
-        else if(speed>0.1f && speed <walkThreshold)
+        else if (speed > 0.1f && speed < walkThreshold)
         {
             animator.SetFloat("Motion", 1);
         }
@@ -141,7 +140,7 @@ public class Terrorist : MonoBehaviour, ITakeDamage,IScare
     }
     void GetSpeed()
     {
-        speed=Vector3.Distance(transform.position,lastPos)/Time.deltaTime;
+        speed = Vector3.Distance(transform.position, lastPos) / Time.deltaTime;
         lastPos = transform.position;
     }
     IEnumerator DetonateBomb()
@@ -150,10 +149,9 @@ public class Terrorist : MonoBehaviour, ITakeDamage,IScare
         Collider[] c = Physics.OverlapSphere(transform.position, blastRadius);
         foreach (Collider others in c)
         {
-            ITakeDamage nearbyNpc= others.GetComponent<ITakeDamage>();
-            if(nearbyNpc != null)
+            ITakeDamage nearbyNpc = others.GetComponent<ITakeDamage>();
+            if (nearbyNpc != null)
             {
-                
                 Instantiate(FindFirstObjectByType<GameManager>().BombPrefab, transform.position, transform.rotation);
                 nearbyNpc.DealDamage(200);
             }
@@ -161,6 +159,6 @@ public class Terrorist : MonoBehaviour, ITakeDamage,IScare
     }
     public void Scare()
     {
-       StartCoroutine (DetonateBomb());
+        StartCoroutine(DetonateBomb());
     }
 }

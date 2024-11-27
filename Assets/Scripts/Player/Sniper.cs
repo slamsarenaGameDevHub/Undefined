@@ -59,7 +59,11 @@ public class Sniper : MonoBehaviour
     {
         if(currentBullet<=0)
         {
-            isReload=true;
+            weaponCam.SetActive(true);
+            GameObject.FindGameObjectWithTag("Scope Image").GetComponent<Image>().enabled = false;
+            gunVolume.weight = 0;
+            dCrossHair.enabled = true;
+            isReload = true;
         }
         else
         {
@@ -76,9 +80,11 @@ public class Sniper : MonoBehaviour
     void Fire()
     {
         if (currentBullet <= 0 || !canShoot) return;
+        shakeCam.Priority = 0;
         gunSource.Play();
         currentBullet--;
         animator.SetTrigger("shoot");
+       
         impulseCam.GenerateImpulse(_gunImpulse);
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, _maxRange))
@@ -116,6 +122,7 @@ public class Sniper : MonoBehaviour
     {
         if (currentBullet <= 0) return;
         canShoot=true;
+        shakeCam.Priority = 2;
     }
     public void Reload()
     {
