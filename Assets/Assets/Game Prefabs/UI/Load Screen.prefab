@@ -273,7 +273,7 @@ RectTransform:
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &31515971550975545
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -287,6 +287,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -311,11 +312,16 @@ MonoBehaviour:
   - {fileID: 21300000, guid: f80780d6781f9c14099c6705c2fc7e7e, type: 3}
   ImageSwitchRate: 5
   Tips:
-  - Play free run to win awards
-  - Press W to make a drift
-  - 'Remove all of the nitro from the road before finishing the races
+  - 'Watch out for people that stop frequently, they''re likely terrorists
 
 '
+  - Hold H while your breath bar is full, to stabilize the gun
+  - If you fire and miss, it'll trigger the innocent civilians to run, but the terrorist
+    won't
+  - It takes three seconds for the terrorists to trigger their bomb after a missed
+    shot
+  - It takes about fifty seconds for the terrorists to trigger their bomb when in
+    sight
   tipText: {fileID: 5729309852458071111}
   switchType: 1
 --- !u!1 &1589866109198940136
@@ -538,15 +544,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 0
+  m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0

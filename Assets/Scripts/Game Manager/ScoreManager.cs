@@ -4,6 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class ScoreManager : MonoBehaviour
 {
+    Sniper sniper;
     [Header("Scored Points")]
     Animator UIAnimator;
     public ScoreDisplay scoreHolder;
@@ -14,12 +15,12 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] TMP_Text scoreText;
     [SerializeField] TMP_Text finalScoreText,bestScoreText;
 
-    [SerializeField] GameObject scoreOverlay;
     
     private void OnEnable()
     {
+        sniper=FindFirstObjectByType<Sniper>();
+        scoreText.text=0.ToString();
         UIAnimator = GetComponent<Animator>();
-        scoreOverlay.SetActive(false);
         GameManager.Scored += GivePoint;
         GameManager.Lost += GameLost;
     }
@@ -35,15 +36,28 @@ public class ScoreManager : MonoBehaviour
     }
     void GameLost()
     {
+        sniper.gameObject.SetActive(false);
         finalScoreText.text=Score.ToString();
+        bestScoreText.text = SavedPlayerData.LoadData().HighestScore.ToString();
         UIAnimator.SetTrigger("GameOver");
     }
     private void Update()
     {
         KillReward = Random.Range(minReward, maxReward);
+        scoreText.text = Score.ToString();
     }
     public void AddToScore(int score)
     {
         Score += score;
+    }
+    void UpdateHighScore()
+    {
+        if(SavedPlayerData.LoadData()!=null)
+        {
+            if(Score>SavedPlayerData.LoadData().HighestScore)
+            {
+                SavedPlayerData.SaveData(new PlayerData(Score));
+            }
+        }
     }
 }
