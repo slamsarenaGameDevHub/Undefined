@@ -195,6 +195,8 @@ public class Terrorist : MonoBehaviour, ITakeDamage,IScare
             {
                 
                 Instantiate(FindFirstObjectByType<GameManager>().BombPrefab, transform.position, transform.rotation);
+                FindFirstObjectByType<GameManager>().explosionImpulse.GenerateImpulse();
+                FindFirstObjectByType<AudioManager>().PlaySound("Explosion");
                 nearbyNpc.DealDamage(200);
             }
         }

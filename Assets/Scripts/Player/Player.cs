@@ -20,7 +20,6 @@ public class Player : MonoBehaviour
     int clipTracker;
         
     AudioSource playerAudioSource;
-    AudioClip activeClip;
     [SerializeField] List<AudioClip> voiceClips = new List<AudioClip>();
     private void OnEnable()
     {
@@ -29,7 +28,6 @@ public class Player : MonoBehaviour
         inputHandler.Player.Enable();
         playerAudioSource=GetComponent<AudioSource>();
         playerAudioSource.loop=false;
-        playerAudioSource.clip=activeClip;
     }
     private void Update()
     {
@@ -55,7 +53,7 @@ public class Player : MonoBehaviour
     }
     public void PlayVoice()
     {
-        activeClip = voiceClips[clipTracker];
+        playerAudioSource.clip = voiceClips[clipTracker];
         playerAudioSource.Play();
     }
 }

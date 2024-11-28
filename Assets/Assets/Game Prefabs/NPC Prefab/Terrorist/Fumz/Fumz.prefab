@@ -1720,7 +1720,7 @@ MonoBehaviour:
   minSpeed: 1
   maxSpeed: 2.5
   walkThreshold: 2.4
-  stopDelay: 10
+  stopDelay: 25
   countDown: 50
   blastRadius: 15
 --- !u!136 &1648881552583440065

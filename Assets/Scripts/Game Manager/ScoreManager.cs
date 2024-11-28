@@ -29,7 +29,7 @@ public class ScoreManager : MonoBehaviour
     
     void GivePoint()
     {
-        
+        FindFirstObjectByType<Player>().PlayVoice();
     }
     void GameLost()
     {

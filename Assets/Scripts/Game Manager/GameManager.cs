@@ -1,3 +1,4 @@
+using Cinemachine;
 using System;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ public class GameManager : MonoBehaviour
 
     [Header("General Necessities")]
     public GameObject BombPrefab;
+    public CinemachineImpulseSource explosionImpulse;
 
     public static void OnCorrectKill()
     {
