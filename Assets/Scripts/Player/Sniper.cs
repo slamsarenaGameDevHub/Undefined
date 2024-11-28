@@ -25,6 +25,7 @@ public class Sniper : MonoBehaviour
 
 
     GameObject weaponCam;
+    [SerializeField] Slider breathSlider;
     //Gun Checks
     bool isReload =false,canShoot=true;
     [SerializeField] Image dCrossHair;
@@ -32,13 +33,14 @@ public class Sniper : MonoBehaviour
 
 
     [Header("Gun Parameters")]
-    float currentBullet=5;
+    float currentBullet=5,breathCountdown;
     [SerializeField] int maxBullet=7;
     [SerializeField] int damage = 150;
     [SerializeField] float _gunImpact=3;
     [SerializeField] float _gunImpulse=1;
     [SerializeField] float _maxRange=1000;
     [SerializeField] float scareRange=30;
+    [SerializeField] float breathHoldTime = 7;
 
 
     [SerializeField] ParticleSystem cartridgeEject;
@@ -63,6 +65,7 @@ public class Sniper : MonoBehaviour
         impulseCam=GetComponent<CinemachineImpulseSource>();
         inputHandler.Player.Attack.performed += ctx => Fire();
         scoreDisplay = FindFirstObjectByType<ScoreManager>().scoreHolder;
+        breathCountdown = breathHoldTime;
     }
     private void Update()
     {
@@ -153,11 +156,31 @@ public class Sniper : MonoBehaviour
         if(HoldBreath()==false)
         {
             shakeCam.enabled = true;
+            breathCountdown += 0.01f;
+            if(breathCountdown>=breathHoldTime)
+            {
+                breathCountdown = breathHoldTime;
+                breathSlider.gameObject.SetActive(false);
+            }
+            else
+            {
+                breathSlider.gameObject.SetActive(true);
+            }
         }
-        else
+        else if(HoldBreath()==true && breathCountdown<=0)
         {
-            shakeCam.enabled=false;
+            shakeCam.enabled=true;
+            breathCountdown = 0;
+            breathSlider.gameObject.SetActive(true);
         }
+        else if(HoldBreath()==true && breathCountdown>0)
+        {
+            shakeCam.enabled = false;
+            breathCountdown -= 0.01f;
+            breathSlider.gameObject.SetActive(true);
+        }
+        breathSlider.value = breathCountdown;
+        
     }
     void Scope()
     {
