@@ -109,6 +109,10 @@ public class Sniper : MonoBehaviour
                 if(hit.transform.GetComponent<NPC>()==null)
                 {
                     ScoreDisplay score = Instantiate(scoreDisplay, hit.point, Quaternion.identity);
+                    if (hit.transform.GetComponent<Terrorist>() != null)
+                    {
+                        FindFirstObjectByType<Player>().PlayVoice();
+                    }
                 }
             }
             else
