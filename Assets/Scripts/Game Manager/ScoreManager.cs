@@ -36,7 +36,7 @@ public class ScoreManager : MonoBehaviour
     void GameLost()
     {
         finalScoreText.text=Score.ToString();
-        scoreOverlay.SetActive(true);
+        UIAnimator.SetTrigger("GameOver");
     }
     private void Update()
     {
