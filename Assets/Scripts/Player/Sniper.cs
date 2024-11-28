@@ -156,7 +156,7 @@ public class Sniper : MonoBehaviour
         if(HoldBreath()==false)
         {
             shakeCam.enabled = true;
-            breathCountdown += 0.01f;
+            breathCountdown += 0.05f;
             if(breathCountdown>=breathHoldTime)
             {
                 breathCountdown = breathHoldTime;
@@ -176,7 +176,7 @@ public class Sniper : MonoBehaviour
         else if(HoldBreath()==true && breathCountdown>0)
         {
             shakeCam.enabled = false;
-            breathCountdown -= 0.01f;
+            breathCountdown -= 0.1f;
             breathSlider.gameObject.SetActive(true);
         }
         breathSlider.value = breathCountdown;
