@@ -7,17 +7,19 @@ public class ScoreManager : MonoBehaviour
     [Header("Scored Points")]
     Animator UIAnimator;
     public ScoreDisplay scoreHolder;
-
-
     public int KillReward,Score;
-    [SerializeField] int minReward=60,maxReward=60;
+    [SerializeField] int minReward=10,maxReward=60;
     
-    [Header("UI Elements")]
+    [Header("Game Score UI Elements")]
     [SerializeField] TMP_Text scoreText;
+    [SerializeField] TMP_Text finalScoreText,bestScoreText;
+
+    [SerializeField] GameObject scoreOverlay;
+    
     private void OnEnable()
     {
         UIAnimator = GetComponent<Animator>();
-
+        scoreOverlay.SetActive(false);
         GameManager.Scored += GivePoint;
         GameManager.Lost += GameLost;
     }
@@ -33,7 +35,8 @@ public class ScoreManager : MonoBehaviour
     }
     void GameLost()
     {
-        print("Wrong Kill");
+        finalScoreText.text=Score.ToString();
+        scoreOverlay.SetActive(true);
     }
     private void Update()
     {
