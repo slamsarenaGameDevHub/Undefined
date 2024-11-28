@@ -25,6 +25,7 @@ public class NPC : MonoBehaviour, ITakeDamage,IScare
     public Transform Path;
     List<Transform> nodes;
 
+    [Tooltip("Change distance is the minimum distance an npc must reach before changing waypoint, stop duration is the delay before the npc stops moving,and the stopped delay is how long the npc is idle")]
     [SerializeField] float changeDistance = 8f,stopDuration=37,stoppedDelay=7;
     [SerializeField] float minSpeed = 1, maxSpeed = 2.5f, walkThreshold = 2.4f;
     float agentSpeed, stopCountDown,speed;
@@ -66,6 +67,7 @@ public class NPC : MonoBehaviour, ITakeDamage,IScare
 
     void Update()
     {
+        GetWaypoint();
         UpdateNode();
         Move();
         GetSpeed();
@@ -124,6 +126,7 @@ public class NPC : MonoBehaviour, ITakeDamage,IScare
     void ResetState()
     {
         Agent.isStopped = false;
+        stopCountDown = stopDuration;
     }
     public void DealDamage(int damage)
     {

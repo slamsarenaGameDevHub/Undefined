@@ -7,10 +7,14 @@ public class ScoreDisplay : MonoBehaviour
     [SerializeField] TMP_Text scoreText;
     [SerializeField] float yIncrement=0.2f;
     Vector3 scorePosition;
-    public void SetScore(int score)
+
+    ScoreManager scoreManager;
+
+    private void OnEnable()
     {
-        scoreText.text=score.ToString();
-        
+        scoreManager=FindFirstObjectByType<ScoreManager>();
+        scoreText.text = scoreManager.KillReward.ToString();
+        scoreManager.AddToScore(scoreManager.KillReward);
     }
     private void Update()
     { 

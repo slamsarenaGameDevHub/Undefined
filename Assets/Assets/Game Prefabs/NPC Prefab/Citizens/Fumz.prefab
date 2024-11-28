@@ -533,9 +533,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _directionOfMovement: 0
+  npcController: {fileID: 22100000, guid: ed5d52b84939e8d4ab8be2fa450efb44, type: 2}
   ragdoll: {fileID: 1604785660411670196, guid: 6cab51c1ed4836549acbc297fd19e449, type: 3}
-  Path: {fileID: 0}
+  Path: {fileID: 2301657723531443427}
   changeDistance: 8
+  stopDuration: 37
+  stoppedDelay: 7
   minSpeed: 1
   maxSpeed: 2.5
   walkThreshold: 2.4

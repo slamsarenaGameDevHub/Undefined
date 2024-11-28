@@ -7,7 +7,11 @@ public class ScoreManager : MonoBehaviour
     [Header("Scored Points")]
     Animator UIAnimator;
     public ScoreDisplay scoreHolder;
-    public int Score;
+
+
+    public int KillReward,Score;
+    [SerializeField] int minReward=60,maxReward=60;
+    
     [Header("UI Elements")]
     [SerializeField] TMP_Text scoreText;
     private void OnEnable()
@@ -30,5 +34,13 @@ public class ScoreManager : MonoBehaviour
     void GameLost()
     {
         print("Wrong Kill");
+    }
+    private void Update()
+    {
+        KillReward = Random.Range(minReward, maxReward);
+    }
+    public void AddToScore(int score)
+    {
+        Score += score;
     }
 }

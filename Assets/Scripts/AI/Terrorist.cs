@@ -34,8 +34,10 @@ public class Terrorist : MonoBehaviour, ITakeDamage,IScare
     Vector3 lastPos;
 
     [Header("Bomb Parameters")]
-    [SerializeField] float stopCountDown = 10;
-    [SerializeField] float stopDelay = 10;
+    float stopCountDown;
+    [Tooltip("Stop delay controls how long the player must walk till it stops")]
+    [SerializeField] float stopDelay = 45;
+    [Tooltip("Countdown till the terrorist blows himself up")]
     [SerializeField]float countDown=50;
     [SerializeField] float blastRadius = 20;
     void OnEnable()
@@ -54,6 +56,7 @@ public class Terrorist : MonoBehaviour, ITakeDamage,IScare
         animator=GetComponent<Animator>();
         Agent.speed = 1;
         lastPos=transform.position;
+        stopCountDown = stopDelay;
     }
 
     void GetWaypoint()
@@ -71,6 +74,7 @@ public class Terrorist : MonoBehaviour, ITakeDamage,IScare
 
     void Update()
     {
+        GetWaypoint();
         UpdateNode();
         Move();
         GetSpeed();
@@ -155,7 +159,6 @@ public class Terrorist : MonoBehaviour, ITakeDamage,IScare
     }
     public void DealDamage(int damage)
     {
-        print(damage);
         Instantiate(ragdoll, transform.position, transform.rotation);
         GameManager.OnCorrectKill();
         Destroy(gameObject);

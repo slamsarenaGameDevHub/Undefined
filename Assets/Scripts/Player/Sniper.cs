@@ -99,8 +99,7 @@ public class Sniper : MonoBehaviour
             if (target != null)
             {
                 target.DealDamage(damage);
-                ScoreDisplay score=Instantiate(scoreDisplay,transform.position,transform.rotation);
-                score.SetScore(damage);
+                ScoreDisplay score=Instantiate(scoreDisplay,hit.point,Quaternion.identity);
             }
             else
             {
