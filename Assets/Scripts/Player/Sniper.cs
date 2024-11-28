@@ -39,6 +39,10 @@ public class Sniper : MonoBehaviour
     [SerializeField] float _gunImpulse=1;
     [SerializeField] float _maxRange=1000;
     [SerializeField] float scareRange=30;
+
+
+    [SerializeField] ParticleSystem cartridgeEject;
+    [SerializeField] ParticleSystem muzzleFlash;
     private void Start()
     {
         GetCom();
@@ -88,6 +92,7 @@ public class Sniper : MonoBehaviour
         shakeCam.Priority = 0;
         gunSource.Play();
         currentBullet--;
+        muzzleFlash.Play();
         animator.SetTrigger("shoot");
        
         impulseCam.GenerateImpulse(_gunImpulse);
@@ -218,6 +223,10 @@ public class Sniper : MonoBehaviour
             shakeCam.m_Lens.FieldOfView = 60;
             _cam.m_Lens.FieldOfView = 60;
         }
+    }
+    public void PlayEject()
+    {
+        cartridgeEject.Play();
     }
 
 }

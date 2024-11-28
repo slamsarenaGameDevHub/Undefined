@@ -1714,7 +1714,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _directionOfMovement: 0
   directionDeterminer: 0
-  animatorController: {fileID: 0}
+  animatorController: {fileID: 22100000, guid: ed5d52b84939e8d4ab8be2fa450efb44, type: 2}
   ragdoll: {fileID: 1604785660411670196, guid: 6cab51c1ed4836549acbc297fd19e449, type: 3}
   Path: {fileID: 2301657723531443427, guid: 012b8dc9ccead53489fd77a2255235b8, type: 3}
   changeDistance: 8
