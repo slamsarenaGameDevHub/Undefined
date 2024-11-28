@@ -1720,10 +1720,9 @@ MonoBehaviour:
   minSpeed: 1
   maxSpeed: 2.5
   walkThreshold: 2.4
-  stopCountDown: 30
   stopDelay: 10
   countDown: 50
-  blastRadius: 20
+  blastRadius: 15
 --- !u!136 &1648881552583440065
 CapsuleCollider:
   m_ObjectHideFlags: 0

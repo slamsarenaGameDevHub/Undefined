@@ -14,6 +14,7 @@ public class Sniper : MonoBehaviour
 
 
     //Components
+    Player player;
     Animator animator;
     Volume gunVolume;
     CinemachineVirtualCamera _cam;
@@ -22,6 +23,8 @@ public class Sniper : MonoBehaviour
 
     Scope gunScope;
     ScoreDisplay scoreDisplay;
+
+
     GameObject weaponCam;
     //Gun Checks
     bool isReload =false,canShoot=true;
@@ -48,6 +51,7 @@ public class Sniper : MonoBehaviour
         inputHandler.Player.Enable();
         Cursor.lockState = CursorLockMode.Locked;
 
+        player = GetComponentInParent<Player>();
         animator=GetComponentInParent<Animator>();
         gunSource = GetComponent<AudioSource>();
         _cam=GameObject.FindGameObjectWithTag("Scope Cam").GetComponent<CinemachineVirtualCamera>();
@@ -100,6 +104,7 @@ public class Sniper : MonoBehaviour
             {
                 target.DealDamage(damage);
                 ScoreDisplay score=Instantiate(scoreDisplay,hit.point,Quaternion.identity);
+                player.PlayVoice();
             }
             else
             {
