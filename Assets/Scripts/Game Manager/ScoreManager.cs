@@ -40,6 +40,9 @@ public class ScoreManager : MonoBehaviour
         finalScoreText.text=Score.ToString();
         bestScoreText.text = SavedPlayerData.LoadData().HighestScore.ToString();
         UIAnimator.SetTrigger("GameOver");
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
     private void Update()
     {
