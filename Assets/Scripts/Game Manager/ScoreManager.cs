@@ -38,7 +38,15 @@ public class ScoreManager : MonoBehaviour
     {
         sniper.gameObject.SetActive(false);
         finalScoreText.text=Score.ToString();
-        bestScoreText.text = SavedPlayerData.LoadData().HighestScore.ToString();
+        if(SavedPlayerData.LoadData()!=null)
+        {
+            bestScoreText.text = SavedPlayerData.LoadData().HighestScore.ToString();
+        }
+        else
+        {
+            bestScoreText.text = Score.ToString();
+        }
+        UpdateHighScore();
         UIAnimator.SetTrigger("GameOver");
 
         Cursor.lockState = CursorLockMode.None;
