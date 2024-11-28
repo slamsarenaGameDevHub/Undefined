@@ -8,10 +8,10 @@ public class Spawner : MonoBehaviour
     [SerializeField] Transform npcCounter;
 
     float m_countDown = 3;
-    int maxSpawnAmount = 40;
     int civilianDeterminer = 0;
     int terroristDeterminer = 0;
     int spawnPosIndex = 0;
+    [SerializeField] int maxSpawnAmount = 40;
     int currentNpcCount
     {
         get

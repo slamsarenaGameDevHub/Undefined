@@ -17,6 +17,7 @@ public class Terrorist : MonoBehaviour, ITakeDamage,IScare
     [Header("Components")]
     NavMeshAgent Agent;
     Animator animator;
+    [SerializeField]AnimatorOverrideController animatorController;
 
     [Header("Waypoint Tracker")]
     int currentWaypoint = 0;
@@ -54,6 +55,7 @@ public class Terrorist : MonoBehaviour, ITakeDamage,IScare
     {
         Agent=GetComponent<NavMeshAgent>();
         animator=GetComponent<Animator>();
+        animator.runtimeAnimatorController = animatorController;
         Agent.speed = 1;
         lastPos=transform.position;
         stopCountDown = stopDelay;
