@@ -1,5 +1,6 @@
 using Cinemachine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -33,7 +34,7 @@ public class Sniper : MonoBehaviour
 
 
     [Header("Gun Parameters")]
-    float currentBullet=5,breathCountdown;
+    float currentBullet=7,breathCountdown;
     [SerializeField] int maxBullet=7;
     [SerializeField] int damage = 150;
     [SerializeField] float _gunImpact=3;
@@ -45,6 +46,9 @@ public class Sniper : MonoBehaviour
 
     [SerializeField] ParticleSystem cartridgeEject;
     [SerializeField] ParticleSystem muzzleFlash;
+
+    [Header("Gun UI")]
+    [SerializeField] List<GameObject> bulletsImages;
     private void OnEnable()
     {
         GetCom();
@@ -140,6 +144,7 @@ public class Sniper : MonoBehaviour
             }
          
         }
+        UpdateUI();
         canShoot = false;
     }
     
@@ -154,6 +159,7 @@ public class Sniper : MonoBehaviour
         currentBullet = maxBullet;
         canShoot = true;
         animator.ResetTrigger("isReload");
+        UpdateUI();
     }
     void StopBreathing()
     {
@@ -202,6 +208,17 @@ public class Sniper : MonoBehaviour
 
         }
 
+    }
+    void UpdateUI()
+    {
+        for (int i = 0; i < maxBullet; i++)
+        {
+            bulletsImages[i].SetActive(false);
+        }
+        for (int i = 0; i < currentBullet; i++)
+        {
+            bulletsImages[i].SetActive(true);
+        }
     }
     IEnumerator ScopeDelay()
     {
