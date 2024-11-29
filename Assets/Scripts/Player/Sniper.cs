@@ -45,9 +45,13 @@ public class Sniper : MonoBehaviour
 
     [SerializeField] ParticleSystem cartridgeEject;
     [SerializeField] ParticleSystem muzzleFlash;
-    private void Start()
+    private void OnEnable()
     {
         GetCom();
+    }
+    private void OnDisable()
+    {
+        inputHandler.Player.Disable();
     }
     void GetCom()
     {
@@ -91,7 +95,7 @@ public class Sniper : MonoBehaviour
     }
     void Fire()
     {
-        if (currentBullet <= 0 || !canShoot) return;
+        if (currentBullet <= 0 || !canShoot || FindFirstObjectByType<GameManager>().isPaused) return;
         shakeCam.Priority = 0;
         gunSource.Play();
         currentBullet--;

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(AudioSource))]
 public class Player : MonoBehaviour
@@ -14,7 +15,14 @@ public class Player : MonoBehaviour
     [SerializeField] float yMinLookLimit = -250,yMaxLookLimit=0,xLookLimit=60;
 
     //Camera Control
-    [SerializeField] float camSensitivity = 30;
+    [SerializeField] Slider mouseSlider;
+    float camSensitivity
+    {
+        get
+        {
+            return mouseSlider.value;
+        }
+    }
 
     [Header("Voice")]
     int clipTracker;
@@ -28,6 +36,10 @@ public class Player : MonoBehaviour
         inputHandler.Player.Enable();
         playerAudioSource=GetComponent<AudioSource>();
         playerAudioSource.loop=false;
+    }
+    void OnDisable()
+    {
+        inputHandler.Player.Disable();
     }
     private void Update()
     {

@@ -40,11 +40,20 @@ public class ScoreManager : MonoBehaviour
         finalScoreText.text=Score.ToString();
         if(SavedPlayerData.LoadData()!=null)
         {
-            bestScoreText.text = SavedPlayerData.LoadData().HighestScore.ToString();
+            if(Score>SavedPlayerData.LoadData().HighestScore)
+            {
+                bestScoreText.text=Score.ToString();
+            }
+            else
+            {
+                bestScoreText.text=SavedPlayerData.LoadData().HighestScore.ToString();
+            }
+            scoreText.text = Score.ToString();
         }
         else
         {
             bestScoreText.text = Score.ToString();
+            SavedPlayerData.SaveData(new PlayerData(Score));
         }
         UpdateHighScore();
         UIAnimator.SetTrigger("GameOver");
@@ -69,6 +78,10 @@ public class ScoreManager : MonoBehaviour
             {
                 SavedPlayerData.SaveData(new PlayerData(Score));
             }
+        }
+        else
+        {
+            SavedPlayerData.SaveData(new PlayerData(Score));
         }
     }
 }
