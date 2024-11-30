@@ -30,7 +30,7 @@ public class Sniper : MonoBehaviour
     //Gun Checks
     bool isReload =false,canShoot=true;
     [SerializeField] Image dCrossHair;
-    AudioSource gunSource;
+    [SerializeField]AudioSource gunSource,reloadSource,magSource;
 
 
     [Header("Gun Parameters")]
@@ -65,7 +65,6 @@ public class Sniper : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         animator=GetComponentInParent<Animator>();
-        gunSource = GetComponent<AudioSource>();
         _cam=GameObject.FindGameObjectWithTag("Scope Cam").GetComponent<CinemachineVirtualCamera>();
         shakeCam=GameObject.FindGameObjectWithTag("Shake Cam").GetComponent<CinemachineVirtualCamera>();
         gunScope=GetComponent<Scope>();
@@ -153,6 +152,10 @@ public class Sniper : MonoBehaviour
         if (currentBullet <= 0) return;
         canShoot=true;
         shakeCam.Priority = 2;
+    }
+    public void PlayReloadSound()
+    {
+        magSource.Play();
     }
     public void Reload()
     {
@@ -275,6 +278,7 @@ public class Sniper : MonoBehaviour
     public void PlayEject()
     {
         cartridgeEject.Play();
+        reloadSource.Play();
     }
 
 }
